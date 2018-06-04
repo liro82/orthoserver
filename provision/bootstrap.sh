@@ -1,9 +1,8 @@
 #!/bin/bash
 
 # config
-app_to_install="git yum-updateonboot"
+app_to_install="git yum-updateonboot httpd mariadb-server mariadb php php-mysql php-gd"
 grp_to_install=("")
-local_username="liro"
 
 # update
 yum -y install epel-release
@@ -17,7 +16,7 @@ done
 # ensure applications are installed
 yum -y install $app_to_install
 
-# setup chrome repo
-if [ ! -e /opt/google/chrome ]; then
-  yum -y localinstall https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
-fi
+# configure firewall
+firewall-cmd --permanent --zone=public --add-service=http
+firewall-cmd --permanent --zone=public --add-service=https
+firewall-cmd --reload
