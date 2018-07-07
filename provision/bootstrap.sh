@@ -28,25 +28,6 @@ systemctl enable $svc_to_enable --now
 # setup database
 mysql -u root < /vagrant/provision/db_setup.sql
 
-# install bootup tasks
-cat << EOF > /etc/systemd/system/orthotasks.service
-[Unit]
-Description=Ortho Tasks
-After=mariadb.service vagrant.mount
-Before=shutdown.target
-RequiresMountsFor=/vagrant
-
-[Service]
-ExecStart=/opt/ortholabor/system/restore_data.sh
-ExecStop=/opt/ortholabor/system/backup_data.sh
-Type=oneshot
-RemainAfterExit=true
-
-[Install]
-WantedBy=multi-user.target
-EOF
-systemctl enable orthotasks.service --now
-
 # install backup / restore scripts
 mkdir -p /opt/ortholabor/system
 cat << EOF > /opt/ortholabor/system/backup_data.sh
@@ -111,3 +92,22 @@ if ls \$sourcedir/dbbackup-* 1> /dev/null 2>&1; then
 fi
 EOF
 chmod +x /opt/ortholabor/system/*.sh
+
+# install bootup tasks
+cat << EOF > /etc/systemd/system/orthotasks.service
+[Unit]
+Description=Ortho Tasks
+After=mariadb.service vagrant.mount
+Before=shutdown.target
+RequiresMountsFor=/vagrant
+
+[Service]
+ExecStart=/opt/ortholabor/system/restore_data.sh
+ExecStop=/opt/ortholabor/system/backup_data.sh
+Type=oneshot
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
+EOF
+systemctl enable orthotasks.service --now
