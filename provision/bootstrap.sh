@@ -43,7 +43,7 @@ dbuser=root
 dbname=ortho
 sourcedir=/var/www/html
 destdir=/vagrant/data/backup
-timestring=`date +"%Y%m%d"`
+timestring=\$(date +"%Y%m%d")
 
 # clean old backups
 find \$destdir -type f -mtime +7 -name "*backup*" -delete
@@ -73,7 +73,7 @@ dbuser=root
 dbname=ortho
 appdir=/var/www/html
 sourcedir=/vagrant/data/restore
-timestring=`date +"%Y%m%d"`
+timestring=\$(date +"%Y%m%d")
 
 # check if appbackup to restore
 if ls \$sourcedir/appbackup-* 1> /dev/null 2>&1; then
