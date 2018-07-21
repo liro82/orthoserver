@@ -46,7 +46,7 @@ destdir=/vagrant/data/backup
 timestring=`date +"%Y%m%d"`
 
 # clean old backups
-find \$destdir -type f -mtime +7 -delete
+find \$destdir -type f -mtime +7 -name "*backup*" -delete
 
 # backup of database data
 mysqldump -u \$dbuser --databases \$dbname > \$destdir/dbbackup
